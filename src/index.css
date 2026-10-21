@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-serif-cn: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'STSong', 'Noto Sans CJK SC', serif;
+    --font-serif-en: 'Cormorant Garamond', 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', serif;
+  }
+
+  html {
+    font-family: var(--font-serif-cn);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    background-color: #EAE5DC;
+    color: #1C1A17;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+.font-editorial {
+  font-family: var(--font-serif-en);
+}
+
+.font-serif-cn {
+  font-family: var(--font-serif-cn);
+}
+
+/* Subtle fine linen paper grain overlay (no mechanical dot grid) */
+.linen-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.028'/%3E%3C/svg%3E");
+}
+
+/* Living fluid pigment aura animations */
+@keyframes auraDriftPrimary {
+  0%, 100% {
+    transform: translate3d(-4%, -3%, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(5%, 4%, 0) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-2%, 6%, 0) scale(0.95);
+  }
+}
+
+@keyframes auraDriftSecondary {
+  0%, 100% {
+    transform: translate3d(5%, 4%, 0) scale(1.04);
+  }
+  50% {
+    transform: translate3d(-6%, -5%, 0) scale(0.94);
+  }
+}
+
+@keyframes tyndallBeamBreathe {
+  0%, 100% {
+    opacity: 0.35;
+    transform: rotate(-18deg) translateY(0px) scaleX(1);
+  }
+  50% {
+    opacity: 0.62;
+    transform: rotate(-16deg) translateY(-12px) scaleX(1.06);
+  }
+}
+
+.animate-aura-primary {
+  animation: auraDriftPrimary 22s ease-in-out infinite;
+}
+
+.animate-aura-secondary {
+  animation: auraDriftSecondary 28s ease-in-out infinite;
+}
+
+.animate-tyndall-beam {
+  animation: tyndallBeamBreathe 14s ease-in-out infinite;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(120, 110, 98, 0.22);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(120, 110, 98, 0.4);
+}

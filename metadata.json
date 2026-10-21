@@ -1,0 +1,6 @@
+{
+  "name": "曹晓春油画艺术馆 | Cao Xiaochun Studio",
+  "description": "曹晓春 (Cao Xiaochun) 个人油画艺术数字美术馆与私人定制空间——看光怎么落下来，看颜料怎么留住它。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
