@@ -2,8 +2,8 @@
 
 @layer base {
   :root {
-    --font-serif-cn: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'STSong', 'Noto Sans CJK SC', serif;
-    --font-serif-en: 'Cormorant Garamond', 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', serif;
+    --font-serif-cn: -apple-system-ui-serif, 'Songti SC', 'Source Han Serif SC', 'Noto Serif SC', 'STSong', 'SimSun', serif;
+    --font-serif-en: 'Cormorant Garamond', 'Baskerville', 'Georgia', 'Times New Roman', serif;
   }
 
   html {
