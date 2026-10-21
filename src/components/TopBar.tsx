@@ -11,7 +11,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   activeAccentName = '星夜钴蓝 · 晨曦暖金'
 }) => {
   return (
-    <header className="fixed top-0 left-0 right-0 z-30 h-14 px-3.5 sm:px-8 flex items-center justify-between bg-[#FAF7F0] border-b border-[#1A1917]/8 transition-colors duration-500 whitespace-nowrap select-none">
+    <header className="fixed top-0 left-0 right-0 z-30 h-14 min-h-[56px] px-3.5 sm:px-8 flex items-center justify-between bg-[#FAF7F0] border-b border-[#1A1917]/8 transition-colors duration-500 whitespace-nowrap select-none">
       {/* Left: Artist Portrait Miniature & Name - Guaranteed single-line horizontal on all devices */}
       <a
         href="#cover-section"

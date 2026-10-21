@@ -34,6 +34,40 @@
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Serif+SC:wght@300;400;500;600&display=swap"
       />
     </noscript>
+
+    <!-- Enforce 100% text size stability across all mobile systems & prevent font inflation -->
+    <style>
+      html, body {
+        -webkit-text-size-adjust: 100% !important;
+        -moz-text-size-adjust: 100% !important;
+        -ms-text-size-adjust: 100% !important;
+        text-size-adjust: 100% !important;
+      }
+    </style>
+
+    <!-- Prevent WeChat WebView from forcibly enlarging fonts on Android/iOS devices -->
+    <script>
+      (function () {
+        function lockWeChatFontSize() {
+          if (typeof WeixinJSBridge === 'object' && typeof WeixinJSBridge.invoke === 'function') {
+            WeixinJSBridge.invoke('setFontSizeCallback', { fontSize: 0 });
+            WeixinJSBridge.on('menu:setfont', function () {
+              WeixinJSBridge.invoke('setFontSizeCallback', { fontSize: 0 });
+            });
+          }
+        }
+        if (typeof WeixinJSBridge === 'object' && typeof WeixinJSBridge.invoke === 'function') {
+          lockWeChatFontSize();
+        } else {
+          if (document.addEventListener) {
+            document.addEventListener('WeixinJSBridgeReady', lockWeChatFontSize, false);
+          } else if (document.attachEvent) {
+            document.attachEvent('WeixinJSBridgeReady', lockWeChatFontSize);
+            document.attachEvent('onWeixinJSBridgeReady', lockWeChatFontSize);
+          }
+        }
+      })();
+    </script>
   </head>
   <body class="bg-[#EAE6DF] text-[#1C1B19] antialiased selection:bg-[#8B3A2B]/20 selection:text-[#8B3A2B]">
     <div id="root"></div>

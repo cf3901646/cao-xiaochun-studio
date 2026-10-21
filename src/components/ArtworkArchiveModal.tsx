@@ -103,7 +103,7 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
       </div>
 
       {/* Clean Minimalist Museum Modal Header */}
-      <div className="sticky top-0 z-30 flex items-center justify-between px-3.5 sm:px-8 h-14 bg-[#F5F1E8] border-b border-[#1A1917]/10 shrink-0 whitespace-nowrap select-none">
+      <div className="sticky top-0 z-30 flex items-center justify-between px-3.5 sm:px-8 h-14 min-h-[56px] bg-[#F5F1E8] border-b border-[#1A1917]/10 shrink-0 whitespace-nowrap select-none">
         <div className="flex items-center gap-2 min-w-0 shrink whitespace-nowrap">
           <span
             className="w-2 h-2 rounded-full shrink-0"
