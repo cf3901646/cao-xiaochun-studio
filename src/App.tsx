@@ -124,21 +124,32 @@ export default function App() {
   }, []);
 
   const handleCopyWechat = useCallback(async () => {
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
+    let success = false;
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
         await navigator.clipboard.writeText(STUDIO_INFO.wechatId);
-      } else {
+        success = true;
+      } catch {
+        // Fallback to execCommand below
+      }
+    }
+    if (!success) {
+      try {
         const textArea = document.createElement('textarea');
         textArea.value = STUDIO_INFO.wechatId;
         textArea.style.position = 'fixed';
-        textArea.style.opacity = '0';
+        textArea.style.left = '-9999px';
+        textArea.style.top = '0';
+        textArea.setAttribute('readonly', '');
         document.body.appendChild(textArea);
+        textArea.focus();
         textArea.select();
+        textArea.setSelectionRange(0, 99999);
         document.execCommand('copy');
         document.body.removeChild(textArea);
+      } catch {
+        // Fallback handled silently
       }
-    } catch {
-      // Fallback handled silently
     }
     setCopiedWechat(true);
     window.setTimeout(() => {

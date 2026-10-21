@@ -89,7 +89,7 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
   return (
     <div
       data-testid="artwork-archive-modal"
-      className="fixed inset-0 z-50 flex flex-col bg-[#F5F1E8] text-[#1C1A17] overflow-y-auto"
+      className="fixed inset-0 z-50 flex flex-col bg-[#F5F1E8] text-[#1C1A17] overflow-y-auto overscroll-contain"
     >
       {/* Hardware-accelerated ambient pigment radial glow */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden transform-gpu">
@@ -155,6 +155,12 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
               data-testid="macro-image-stage"
               onMouseMove={(e) => {
                 if (macroEnabled) updatePointerPosition(e.clientX, e.clientY);
+              }}
+              onTouchStart={(e) => {
+                if (e.touches[0]) {
+                  setMacroEnabled(true);
+                  updatePointerPosition(e.touches[0].clientX, e.touches[0].clientY);
+                }
               }}
               onTouchMove={(e) => {
                 if (macroEnabled && e.touches[0]) {
