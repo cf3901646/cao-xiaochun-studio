@@ -123,14 +123,14 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
             data-testid="toggle-macro-zoom"
             onClick={() => setMacroEnabled((prev) => !prev)}
             aria-label={macroEnabled ? '退出微距模式' : '开启 2.5× 微距'}
-            className={`px-2.5 py-1.5 text-xs flex items-center gap-1.5 border transition-colors cursor-pointer whitespace-nowrap ${
+            className={`px-3 py-1.5 text-xs flex items-center gap-1.5 border rounded-xs font-medium transition-all cursor-pointer whitespace-nowrap shadow-xs ${
               macroEnabled
-                ? 'border-[#8B3A2B] text-[#8B3A2B] bg-[#8B3A2B]/10'
-                : 'border-[#1A1917]/15 text-[#1A1917]/65 hover:text-[#1A1917] hover:bg-[#1A1917]/5'
+                ? 'bg-[#8B3A2B] text-[#FAF7F0] border-[#8B3A2B]'
+                : 'bg-[#8B3A2B]/10 text-[#8B3A2B] border-[#8B3A2B]/40 hover:bg-[#8B3A2B] hover:text-[#FAF7F0]'
             }`}
           >
             <ZoomIn className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">{macroEnabled ? '微距中' : '2.5× 微距'}</span>
+            <span>{macroEnabled ? '微距检视中' : '2.5× 微距检视'}</span>
           </button>
 
           <button
@@ -178,6 +178,14 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
                 draggable={false}
               />
 
+              {/* Explicit Floating Action Badge on Unzoomed Canvas */}
+              {!macroEnabled && (
+                <div className="absolute bottom-2.5 right-2.5 pointer-events-none z-10 flex items-center gap-1.5 px-2.5 py-1.5 bg-[#1C1A17]/85 text-[#FAF7F0] border border-[#FAF7F0]/30 rounded-xs text-[11px] font-medium tracking-wide shadow-md">
+                  <ZoomIn className="w-3.5 h-3.5 text-[#E2B887]" />
+                  <span>轻触画布 · 开启 2.5× 微距</span>
+                </div>
+              )}
+
               {/* Minimalist Optical Magnifier Loupe - Pure Delicate Rim, No Clunky Badge */}
               {macroEnabled && (
                 <div
@@ -209,7 +217,7 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
           {/* Minimalist Brushstroke Focal Spots */}
           {artwork.macroSpots.length > 0 && (
             <div className="mt-3.5 flex flex-wrap items-center justify-center gap-2">
-              <span className="text-[11px] tracking-wider text-[#1A1917]/50 mr-0.5">
+              <span className="text-[11px] tracking-wider text-[#8B3A2B] font-medium mr-0.5">
                 刀笔看点：
               </span>
               {artwork.macroSpots.map((spot) => (
@@ -224,7 +232,7 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
                       y: spot.yPercent / 100
                     });
                   }}
-                  className="px-2.5 py-1 text-xs border border-[#1A1917]/15 bg-[#FAF7F0] hover:border-[#8B3A2B] hover:text-[#8B3A2B] transition-colors cursor-pointer"
+                  className="px-3 py-1 text-xs border border-[#8B3A2B]/30 bg-[#FAF7F0] text-[#1A1917] hover:border-[#8B3A2B] hover:text-[#8B3A2B] rounded-xs shadow-2xs transition-colors cursor-pointer"
                 >
                   {spot.label}
                 </button>
@@ -232,10 +240,13 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
             </div>
           )}
 
-          <p className="mt-2 text-xs text-[#1A1917]/50 text-center tracking-wide">
-            {macroEnabled
-              ? '轻触画面滑动检视局部刀笔肌理'
-              : '轻触画面或看点，检视 2.5× 局部刀笔与布纹'}
+          <p className="mt-2.5 text-xs text-[#8B3A2B] text-center font-medium tracking-wide flex items-center justify-center gap-1.5">
+            <ZoomIn className="w-3.5 h-3.5" />
+            <span>
+              {macroEnabled
+                ? '在画布任意位置滑动，即可实时检视 2.5× 局部刀笔细节'
+                : '轻触画布或点击看点，开启 2.5× 局部微距检视'}
+            </span>
           </p>
         </div>
 

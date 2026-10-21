@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { Copy, Check, ArrowDown, Sparkles } from 'lucide-react';
+import { Copy, Check, ArrowDown, Sparkles, ZoomIn } from 'lucide-react';
 import { ARTWORKS, ArtworkItem, STUDIO_INFO } from './data/artworks';
 import { getAdjacentArtwork, formatChineseArtworkCount } from './utils/canvasMath';
 import { TopBar } from './components/TopBar';
@@ -402,13 +402,14 @@ export default function App() {
                         </div>
                       </div>
 
-                      {/* Quiet Editorial Caption Below Frame (No Ugly Dark Pill Over the Painting) */}
-                      <div className="mt-2.5 px-0.5 flex items-center justify-between text-[11px] text-[#1A1917]/50 group-hover:text-[#8B3A2B] transition-colors">
-                        <span className="font-editorial italic">
+                      {/* Prominent Micro-Inspection Action Below Frame */}
+                      <div className="mt-3 px-0.5 flex items-center justify-between gap-2">
+                        <span className="font-editorial italic text-xs text-[#1A1917]/60 truncate">
                           {artwork.enTitle}
                         </span>
-                        <span className="tracking-wider shrink-0 ml-2">
-                          轻触画布 · 2.5× 微距检视 →
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#8B3A2B]/10 group-hover:bg-[#8B3A2B] text-[#8B3A2B] group-hover:text-[#FAF7F0] border border-[#8B3A2B]/35 rounded-xs text-xs font-medium tracking-wide transition-all shadow-xs shrink-0 whitespace-nowrap">
+                          <ZoomIn className="w-3.5 h-3.5" />
+                          <span>轻触画布 · 2.5× 微距检视</span>
                         </span>
                       </div>
                     </div>
