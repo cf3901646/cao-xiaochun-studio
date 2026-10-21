@@ -51,7 +51,7 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
       } else {
         setCursorRel({ x: 0.5, y: 0.5 });
       }
-      setMacroEnabled(true);
+      setMacroEnabled(false);
       window.setTimeout(measureImage, 50);
     }
   }, [artwork]);
@@ -102,34 +102,35 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
         />
       </div>
 
-      {/* Refined Warm Linen Modal Header */}
-      <div className="sticky top-0 z-30 flex items-center justify-between px-4 sm:px-8 h-14 bg-[#F5F1E8] border-b border-[#1A1917]/10 shrink-0">
-        <div className="flex items-center gap-2.5 min-w-0">
+      {/* Clean Minimalist Museum Modal Header */}
+      <div className="sticky top-0 z-30 flex items-center justify-between px-3.5 sm:px-8 h-14 bg-[#F5F1E8] border-b border-[#1A1917]/10 shrink-0 whitespace-nowrap select-none">
+        <div className="flex items-center gap-2 min-w-0 shrink whitespace-nowrap">
           <span
             className="w-2 h-2 rounded-full shrink-0"
             style={{ backgroundColor: artwork.ambientColor.hex }}
           />
-          <span className="font-editorial text-xs tracking-[0.2em] text-[#8B3A2B] shrink-0">
-            PLATE {artwork.indexNumber} / {String(ARTWORKS.length).padStart(2, '0')}
+          <span className="font-editorial text-xs tracking-[0.16em] sm:tracking-[0.2em] text-[#8B3A2B] shrink-0 whitespace-nowrap">
+            PLATE {artwork.indexNumber}
           </span>
-          <span className="text-sm sm:text-base font-medium tracking-wide truncate text-[#1A1917]">
+          <span className="text-sm sm:text-base font-medium tracking-wide text-[#1A1917] whitespace-nowrap">
             {artwork.title}
           </span>
         </div>
 
-        <div className="flex items-center gap-2.5 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
             data-testid="toggle-macro-zoom"
             onClick={() => setMacroEnabled((prev) => !prev)}
-            className={`px-3 py-1.5 text-xs flex items-center gap-1.5 border transition-colors cursor-pointer ${
+            aria-label={macroEnabled ? '退出微距模式' : '开启 2.5× 微距'}
+            className={`px-2.5 py-1.5 text-xs flex items-center gap-1.5 border transition-colors cursor-pointer whitespace-nowrap ${
               macroEnabled
-                ? 'bg-[#1C1A17] border-[#1C1A17] text-[#F7F4EE]'
-                : 'border-[#1A1917]/20 text-[#1A1917]/75 hover:bg-[#1A1917]/5'
+                ? 'border-[#8B3A2B] text-[#8B3A2B] bg-[#8B3A2B]/10'
+                : 'border-[#1A1917]/15 text-[#1A1917]/65 hover:text-[#1A1917] hover:bg-[#1A1917]/5'
             }`}
           >
             <ZoomIn className="w-3.5 h-3.5" />
-            <span>{macroEnabled ? '2.5× 微距已开启' : '开启 2.5× 微距'}</span>
+            <span className="hidden sm:inline">{macroEnabled ? '微距中' : '2.5× 微距'}</span>
           </button>
 
           <button
@@ -137,7 +138,7 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
             data-testid="close-modal-btn"
             onClick={onClose}
             aria-label="关闭详情"
-            className="p-2 border border-[#1A1917]/15 text-[#1A1917]/70 hover:text-[#1A1917] hover:bg-[#1A1917]/5 cursor-pointer"
+            className="p-1.5 sm:p-2 border border-[#1A1917]/15 text-[#1A1917]/70 hover:text-[#1A1917] hover:bg-[#1A1917]/5 cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -145,20 +146,25 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
       </div>
 
       {/* Main Content Area: Zero Black Bars, Intrinsic Canvas Fit */}
-      <div className="relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 sm:px-8 py-6 sm:py-8 grid grid-cols-1 lg:grid-cols-12 gap-7 sm:gap-10 items-start">
+      <div className="relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 sm:px-8 py-5 sm:py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 items-start">
         {/* Left: Interactive Painting Mounted on Warm Cotton Mat (Zero Black Bars) */}
         <div className="lg:col-span-7 flex flex-col items-center w-full">
-          <div className="p-2.5 sm:p-4 bg-[#FAF7F0] border border-[#1A1917]/12 shadow-[0_24px_60px_rgba(26,25,23,0.12)] max-w-full">
+          <div className="p-2 sm:p-3.5 bg-[#FAF7F0] border border-[#1A1917]/12 shadow-[0_20px_50px_rgba(26,25,23,0.10)] max-w-full">
             <div
               ref={imageContainerRef}
               data-testid="macro-image-stage"
-              onMouseMove={(e) => updatePointerPosition(e.clientX, e.clientY)}
+              onMouseMove={(e) => {
+                if (macroEnabled) updatePointerPosition(e.clientX, e.clientY);
+              }}
               onTouchMove={(e) => {
-                if (e.touches[0]) {
+                if (macroEnabled && e.touches[0]) {
                   updatePointerPosition(e.touches[0].clientX, e.touches[0].clientY);
                 }
               }}
-              onClick={(e) => updatePointerPosition(e.clientX, e.clientY)}
+              onClick={(e) => {
+                setMacroEnabled(true);
+                updatePointerPosition(e.clientX, e.clientY);
+              }}
               className={`relative block w-full overflow-hidden select-none ${
                 macroEnabled ? 'cursor-crosshair touch-none' : 'cursor-zoom-in'
               }`}
@@ -172,7 +178,7 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
                 draggable={false}
               />
 
-              {/* True 2.5x Optical Magnifier Loupe */}
+              {/* Minimalist Optical Magnifier Loupe - Pure Delicate Rim, No Clunky Badge */}
               {macroEnabled && (
                 <div
                   data-testid="macro-loupe-lens"
@@ -180,7 +186,7 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
                     left: `${cursorRel.x * 100}%`,
                     top: `${cursorRel.y * 100}%`
                   }}
-                  className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 w-36 h-36 sm:w-44 sm:h-44 rounded-full border-2 border-[#FAF7F0] shadow-[0_18px_45px_rgba(26,25,23,0.45)] overflow-hidden bg-[#FAF7F0] z-20"
+                  className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 w-36 h-36 sm:w-44 sm:h-44 rounded-full border-2 border-white shadow-[0_12px_40px_rgba(0,0,0,0.4)] overflow-hidden bg-[#FAF7F0] z-20"
                 >
                   <img
                     src={artwork.imageUrl}
@@ -195,18 +201,15 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
                       top: `calc(50% - ${cursorRel.y * imgSize.height * ZOOM_FACTOR}px)`
                     }}
                   />
-                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-[#1C1A17]/80 backdrop-blur-xs text-[10px] font-editorial tracking-widest text-[#F7F4EE] whitespace-nowrap">
-                    2.5× 刀笔微距
-                  </div>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Interactive Brushstroke Focal Spots */}
+          {/* Minimalist Brushstroke Focal Spots */}
           {artwork.macroSpots.length > 0 && (
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-              <span className="text-[11px] tracking-wider text-[#1A1917]/50 mr-1">
+            <div className="mt-3.5 flex flex-wrap items-center justify-center gap-2">
+              <span className="text-[11px] tracking-wider text-[#1A1917]/50 mr-0.5">
                 刀笔看点：
               </span>
               {artwork.macroSpots.map((spot) => (
@@ -221,7 +224,7 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
                       y: spot.yPercent / 100
                     });
                   }}
-                  className="px-2.5 py-1 text-xs border border-[#1A1917]/15 bg-[#FAF7F0]/80 hover:border-[#8B3A2B] hover:text-[#8B3A2B] transition-colors cursor-pointer"
+                  className="px-2.5 py-1 text-xs border border-[#1A1917]/15 bg-[#FAF7F0] hover:border-[#8B3A2B] hover:text-[#8B3A2B] transition-colors cursor-pointer"
                 >
                   {spot.label}
                 </button>
@@ -229,10 +232,10 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
             </div>
           )}
 
-          <p className="mt-2.5 text-xs text-[#1A1917]/55 text-center">
+          <p className="mt-2 text-xs text-[#1A1917]/50 text-center tracking-wide">
             {macroEnabled
-              ? '手指在画布滑动或轻触上方「刀笔看点」，可 2.5 倍放大检视亚麻布纹与刮刀肌理'
-              : '点击右上角「开启 2.5× 微距」可检视局部刀笔细节'}
+              ? '轻触画面滑动检视局部刀笔肌理'
+              : '轻触画面或看点，检视 2.5× 局部刀笔与布纹'}
           </p>
         </div>
 
