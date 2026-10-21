@@ -89,21 +89,21 @@ export const ArtworkArchiveModal: React.FC<ArtworkArchiveModalProps> = ({
   return (
     <div
       data-testid="artwork-archive-modal"
-      className="fixed inset-0 z-50 flex flex-col bg-[#F3EFE6]/97 backdrop-blur-xl text-[#1C1A17] overflow-y-auto"
+      className="fixed inset-0 z-50 flex flex-col bg-[#F5F1E8] text-[#1C1A17] overflow-y-auto"
     >
-      {/* Dynamic Ambient Pigment Glow inside Modal (Smooth CSS backgroundColor interpolation) */}
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+      {/* Hardware-accelerated ambient pigment radial glow */}
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden transform-gpu">
         <div
-          className="absolute -top-[10%] left-[8%] w-[65vw] h-[65vw] rounded-full opacity-[0.20] blur-[120px] animate-aura-primary"
+          className="absolute -top-[10%] left-[8%] w-[70vw] h-[70vw] max-w-[700px] max-h-[700px] rounded-full opacity-[0.22] animate-aura-primary"
           style={{
-            backgroundColor: artwork.ambientColor.hex,
-            transition: 'background-color 2000ms cubic-bezier(0.22, 1, 0.36, 1)'
+            background: `radial-gradient(circle, ${artwork.ambientColor.hex} 0%, rgba(255,255,255,0) 70%)`,
+            transition: 'background 600ms cubic-bezier(0.16, 1, 0.3, 1)'
           }}
         />
       </div>
 
       {/* Refined Warm Linen Modal Header */}
-      <div className="sticky top-0 z-30 flex items-center justify-between px-4 sm:px-8 h-14 bg-[#F3EFE6]/88 backdrop-blur-md border-b border-[#1A1917]/10 shrink-0">
+      <div className="sticky top-0 z-30 flex items-center justify-between px-4 sm:px-8 h-14 bg-[#F5F1E8] border-b border-[#1A1917]/10 shrink-0">
         <div className="flex items-center gap-2.5 min-w-0">
           <span
             className="w-2 h-2 rounded-full shrink-0"

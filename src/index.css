@@ -31,54 +31,39 @@
   font-family: var(--font-serif-cn);
 }
 
-/* Subtle fine linen paper grain overlay (no mechanical dot grid) */
+/* Modern clean linen paper texture without CPU-expensive feTurbulence SVG filters */
 .linen-grain {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.028'/%3E%3C/svg%3E");
+  background-image: radial-gradient(rgba(26, 25, 23, 0.03) 1px, transparent 0);
+  background-size: 24px 24px;
 }
 
-/* Living fluid pigment aura animations */
+/* Highly optimized GPU-accelerated atmospheric ambient drift */
 @keyframes auraDriftPrimary {
   0%, 100% {
-    transform: translate3d(-4%, -3%, 0) scale(1);
+    transform: translate3d(-3%, -2%, 0) scale(1);
   }
-  33% {
-    transform: translate3d(5%, 4%, 0) scale(1.08);
-  }
-  66% {
-    transform: translate3d(-2%, 6%, 0) scale(0.95);
+  50% {
+    transform: translate3d(4%, 3%, 0) scale(1.05);
   }
 }
 
 @keyframes auraDriftSecondary {
   0%, 100% {
-    transform: translate3d(5%, 4%, 0) scale(1.04);
+    transform: translate3d(3%, 3%, 0) scale(1.03);
   }
   50% {
-    transform: translate3d(-6%, -5%, 0) scale(0.94);
-  }
-}
-
-@keyframes tyndallBeamBreathe {
-  0%, 100% {
-    opacity: 0.35;
-    transform: rotate(-18deg) translateY(0px) scaleX(1);
-  }
-  50% {
-    opacity: 0.62;
-    transform: rotate(-16deg) translateY(-12px) scaleX(1.06);
+    transform: translate3d(-4%, -4%, 0) scale(0.97);
   }
 }
 
 .animate-aura-primary {
-  animation: auraDriftPrimary 22s ease-in-out infinite;
+  animation: auraDriftPrimary 26s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-aura-secondary {
-  animation: auraDriftSecondary 28s ease-in-out infinite;
-}
-
-.animate-tyndall-beam {
-  animation: tyndallBeamBreathe 14s ease-in-out infinite;
+  animation: auraDriftSecondary 32s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* Custom subtle scrollbar */

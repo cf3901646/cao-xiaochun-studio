@@ -45,13 +45,15 @@ export default function App() {
 
   const coverRef = useRef<HTMLElement | null>(null);
   const cardRefs = useRef<Record<string, HTMLElement | null>>({});
+  const activeSectionIdRef = useRef<string>('cover');
 
-  // Scroll-synchronized living chromatic atmosphere + subtle reveal
+  // Highly stabilized scroll atmosphere detection: updates ONLY when primary focus shifts
   useEffect(() => {
     if (typeof IntersectionObserver === 'undefined') return;
 
     const observer = new IntersectionObserver(
       (entries) => {
+        // Collect visible candidate sections
         entries.forEach((entry) => {
           const sectionId = entry.target.getAttribute('data-section-id');
           if (entry.isIntersecting && sectionId) {
@@ -59,32 +61,57 @@ export default function App() {
               prev[sectionId] ? prev : { ...prev, [sectionId]: true }
             );
           }
+        });
 
-          // Update living pigment aura when a section occupies central viewport
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.22) {
-            if (sectionId === 'cover' || sectionId === 'statement') {
-              setAtmosphere(COVER_ATMOSPHERE);
-            } else if (sectionId) {
-              const matchedIndex = ARTWORKS.findIndex((w) => w.id === sectionId);
-              if (matchedIndex !== -1) {
-                const currentArt = ARTWORKS[matchedIndex];
-                const neighborArt =
-                  ARTWORKS[(matchedIndex + 1) % ARTWORKS.length] || currentArt;
-                setAtmosphere({
-                  primaryHex: currentArt.ambientColor.hex,
-                  secondaryHex: neighborArt.ambientColor.hex,
-                  beamHex: currentArt.ambientColor.hex,
-                  surfaceTint: ARTWORK_SURFACE_TINTS[currentArt.id] || '#EAE5DC',
-                  accentName: `${currentArt.title.replace(/[《》]/g, '')} · ${currentArt.ambientColor.accentName}`
-                });
-              }
+        // Find the single section closest to center viewport
+        const viewportCenter = window.innerHeight * 0.45;
+        let bestId: string | null = null;
+        let minDistance = Infinity;
+
+        const checkElement = (el: HTMLElement | null, id: string) => {
+          if (!el) return;
+          const rect = el.getBoundingClientRect();
+          // Element must overlap with viewport
+          if (rect.bottom > 80 && rect.top < window.innerHeight - 80) {
+            const elCenter = (rect.top + rect.bottom) / 2;
+            const dist = Math.abs(elCenter - viewportCenter);
+            if (dist < minDistance) {
+              minDistance = dist;
+              bestId = id;
             }
           }
+        };
+
+        checkElement(coverRef.current, 'cover');
+        checkElement(cardRefs.current['statement'], 'statement');
+        ARTWORKS.forEach((w) => {
+          checkElement(cardRefs.current[w.id], w.id);
         });
+
+        if (bestId && bestId !== activeSectionIdRef.current) {
+          activeSectionIdRef.current = bestId;
+          if (bestId === 'cover' || bestId === 'statement') {
+            setAtmosphere(COVER_ATMOSPHERE);
+          } else {
+            const matchedIndex = ARTWORKS.findIndex((w) => w.id === bestId);
+            if (matchedIndex !== -1) {
+              const currentArt = ARTWORKS[matchedIndex];
+              const neighborArt =
+                ARTWORKS[(matchedIndex + 1) % ARTWORKS.length] || currentArt;
+              setAtmosphere({
+                primaryHex: currentArt.ambientColor.hex,
+                secondaryHex: neighborArt.ambientColor.hex,
+                beamHex: currentArt.ambientColor.hex,
+                surfaceTint: ARTWORK_SURFACE_TINTS[currentArt.id] || '#EAE5DC',
+                accentName: `${currentArt.title.replace(/[《》]/g, '')} · ${currentArt.ambientColor.accentName}`
+              });
+            }
+          }
+        }
       },
       {
-        threshold: [0.15, 0.28, 0.5],
-        rootMargin: '-12% 0px -15% 0px'
+        threshold: [0, 0.2, 0.4, 0.6],
+        rootMargin: '-5% 0px -10% 0px'
       }
     );
 
@@ -136,49 +163,33 @@ export default function App() {
       className="min-h-screen w-full relative text-[#1C1A17]"
       style={{
         backgroundColor: atmosphere.surfaceTint,
-        transition: 'background-color 2400ms cubic-bezier(0.22, 1, 0.36, 1)'
+        transition: 'background-color 800ms cubic-bezier(0.16, 1, 0.3, 1)'
       }}
     >
       {/* ===============================================================
-          LIVING CHROMATIC ATMOSPHERE & TYNDALL LIGHT BEAMS
-          Uses true CSS-interpolated backgroundColor on Gaussian blurred orbs
-          so every color shift melts smoothly over 2.4 seconds (never snaps!)
+          PERFORMANCE-ENGINEERED CHROMATIC AMBIENT AURA
+          Zero 150px Gaussian blur convolution! Uses hardware-accelerated
+          pure radial gradients for smooth, 60fps/120fps stutter-free render.
           =============================================================== */}
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        {/* Primary Drifting Pigment Orb */}
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden transform-gpu">
+        {/* Primary Ambient Gradient Glow */}
         <div
-          className="absolute -top-[12%] -left-[10%] w-[78vw] h-[78vw] sm:w-[56vw] sm:h-[56vw] rounded-full opacity-[0.22] blur-[95px] sm:blur-[135px] animate-aura-primary"
+          className="absolute -top-[10%] -left-[10%] w-[80vw] h-[80vw] max-w-[780px] max-h-[780px] rounded-full opacity-[0.24] animate-aura-primary"
           style={{
-            backgroundColor: atmosphere.primaryHex,
-            transition: 'background-color 2400ms cubic-bezier(0.22, 1, 0.36, 1)'
+            background: `radial-gradient(circle, ${atmosphere.primaryHex} 0%, rgba(255,255,255,0) 70%)`,
+            transition: 'background 800ms cubic-bezier(0.16, 1, 0.3, 1)'
           }}
         />
-        {/* Secondary Counter-Drifting Complementary Pigment Orb */}
+        {/* Secondary Counter Complementary Glow */}
         <div
-          className="absolute top-[28%] -right-[12%] w-[80vw] h-[80vw] sm:w-[54vw] sm:h-[54vw] rounded-full opacity-[0.20] blur-[100px] sm:blur-[145px] animate-aura-secondary"
+          className="absolute top-[35%] -right-[10%] w-[80vw] h-[80vw] max-w-[760px] max-h-[760px] rounded-full opacity-[0.20] animate-aura-secondary"
           style={{
-            backgroundColor: atmosphere.secondaryHex,
-            transition: 'background-color 2600ms cubic-bezier(0.22, 1, 0.36, 1)'
+            background: `radial-gradient(circle, ${atmosphere.secondaryHex} 0%, rgba(255,255,255,0) 70%)`,
+            transition: 'background 800ms cubic-bezier(0.16, 1, 0.3, 1)'
           }}
         />
-        {/* Bottom-Left Ambient Resonance Orb */}
-        <div
-          className="absolute -bottom-[15%] left-[12%] w-[70vw] h-[70vw] sm:w-[48vw] sm:h-[48vw] rounded-full opacity-[0.16] blur-[110px] sm:blur-[150px] animate-aura-primary"
-          style={{
-            backgroundColor: atmosphere.beamHex,
-            transition: 'background-color 2800ms cubic-bezier(0.22, 1, 0.36, 1)'
-          }}
-        />
-        {/* Subtle Tyndall Diagonal Warm Sunbeam */}
-        <div
-          className="absolute -top-[20%] left-[18%] w-[55vw] h-[120vh] rounded-full opacity-[0.28] blur-[100px] animate-tyndall-beam"
-          style={{
-            backgroundColor: '#FFF6E5',
-            transition: 'background-color 2400ms cubic-bezier(0.22, 1, 0.36, 1)'
-          }}
-        />
-        {/* Fine Raw Linen Paper Grain */}
-        <div className="absolute inset-0 linen-grain" />
+        {/* Subtle Warm Linen Texture Layer */}
+        <div className="absolute inset-0 linen-grain opacity-60" />
       </div>
 
       {/* Minimalist Museum Header (No Top-Right WeChat Ad Button) */}
@@ -197,7 +208,7 @@ export default function App() {
           ref={coverRef}
           data-section-id="cover"
           aria-label="画册开篇扉页封面"
-          className="relative bg-[#F7F3EB]/90 backdrop-blur-xs border border-[#1A1917]/14 p-3 sm:p-5 shadow-[0_24px_65px_rgba(26,25,23,0.07)]"
+          className="relative bg-[#F7F3EB] border border-[#1A1917]/14 p-3 sm:p-5 shadow-[0_20px_55px_rgba(26,25,23,0.07)]"
         >
           {/* Architectural Double-Hairline Inner Monograph Frame */}
           <div className="border border-[#1A1917]/10 p-4 sm:p-10 lg:p-12">
@@ -282,7 +293,7 @@ export default function App() {
           }}
           data-section-id="statement"
           aria-label="画家创作自述"
-          className="bg-[#F7F3EB]/85 backdrop-blur-xs border border-[#1A1917]/12 p-6 sm:p-11 shadow-[0_18px_45px_rgba(26,25,23,0.05)]"
+          className="bg-[#F7F3EB] border border-[#1A1917]/12 p-6 sm:p-11 shadow-[0_16px_40px_rgba(26,25,23,0.05)]"
         >
           <div className="flex items-center justify-between text-[11px] font-editorial tracking-[0.22em] uppercase text-[#8B3A2B] pb-3 mb-5 border-b border-[#1A1917]/10">
             <span>PREFACE · 序言与画室手记</span>
@@ -334,6 +345,8 @@ export default function App() {
                   data-section-id={artwork.id}
                   data-testid={`artwork-card-${artwork.indexNumber}`}
                   onMouseEnter={() => {
+                    if (activeSectionIdRef.current === artwork.id) return;
+                    activeSectionIdRef.current = artwork.id;
                     const neighborArt =
                       ARTWORKS[(index + 1) % ARTWORKS.length] || artwork;
                     setAtmosphere({
@@ -344,7 +357,7 @@ export default function App() {
                       accentName: `${artwork.title.replace(/[《》]/g, '')} · ${artwork.ambientColor.accentName}`
                     });
                   }}
-                  className={`bg-[#F7F4EC]/92 backdrop-blur-xs border border-[#1A1917]/12 p-5 sm:p-7 shadow-[0_16px_42px_rgba(26,25,23,0.06)] flex flex-col justify-between transition-all duration-700 ${
+                  className={`bg-[#FAF7F0] border border-[#1A1917]/12 p-5 sm:p-7 shadow-[0_12px_36px_rgba(26,25,23,0.06)] flex flex-col justify-between transition-transform duration-500 will-change-transform ${
                     index % 2 === 1 ? 'md:mt-14' : ''
                   } ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-90 translate-y-2'}`}
                 >
@@ -442,7 +455,7 @@ export default function App() {
         <section
           id="commission-section"
           aria-label="私人定制与约稿通道"
-          className="bg-[#F7F3EB]/90 backdrop-blur-xs border border-[#1A1917]/14 p-6 sm:p-11 shadow-[0_20px_50px_rgba(26,25,23,0.06)]"
+          className="bg-[#F7F3EB] border border-[#1A1917]/14 p-6 sm:p-11 shadow-[0_18px_45px_rgba(26,25,23,0.06)]"
         >
           <p className="font-editorial text-[11px] tracking-[0.24em] uppercase text-[#8B3A2B] mb-1.5">
             BESPOKE COMMISSIONS · 尺素与私人定制
