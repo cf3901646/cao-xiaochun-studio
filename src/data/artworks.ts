@@ -105,15 +105,15 @@ export const ARTWORKS: ArtworkItem[] = [
         id: 'spot-01-a',
         label: '果皮透明罩染与水珠高光',
         note: '朱红与镉橙薄染出的半透明果肉感，水珠靠底部重色投影与顶端暖白撑起张力',
-        xPercent: 38,
-        yPercent: 64
+        xPercent: 61,
+        yPercent: 49
       },
       {
         id: 'spot-01-b',
         label: '黄斑落叶与开裂旧木桩',
         note: '干裂木纹的岁月刀痕与落叶叶脉肌理形成冷暖材质对比',
-        xPercent: 46,
-        yPercent: 72
+        xPercent: 44,
+        yPercent: 65
       }
     ]
   },
