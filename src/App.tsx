@@ -213,8 +213,10 @@ export default function App() {
           {/* Architectural Double-Hairline Inner Monograph Frame */}
           <div className="border border-[#1A1917]/10 p-4 sm:p-10 lg:p-12">
             {/* Top Monograph Folio Header */}
-            <div className="flex items-center justify-between gap-2 text-[10px] sm:text-[11px] font-editorial tracking-[0.18em] sm:tracking-[0.24em] uppercase text-[#1A1917]/55 pb-3.5 mb-5 sm:mb-8 border-b border-[#1A1917]/10">
-              <span className="truncate">MONOGRAPH · 个人油画作品集</span>
+            <div className="flex items-center justify-between gap-2 text-[9.5px] sm:text-[11px] font-editorial tracking-[0.12em] sm:tracking-[0.24em] uppercase text-[#1A1917]/55 pb-3 sm:pb-3.5 mb-5 sm:mb-8 border-b border-[#1A1917]/10 whitespace-nowrap">
+              <span className="shrink-0 whitespace-nowrap">
+                <span className="hidden xs:inline">MONOGRAPH · </span>个人油画作品集
+              </span>
               <span className="shrink-0 whitespace-nowrap">ARCHIVE I — {totalCountStr}</span>
             </div>
 
