@@ -19,6 +19,24 @@
     <link rel="apple-touch-icon" href="/assets/aistudio/a3afa24fcf5bcde2a9d8437ee976526e_db58066f.webp" />
     <meta property="og:image" content="https://476537381.xyz/assets/aistudio/a3afa24fcf5bcde2a9d8437ee976526e_db58066f.webp" />
     <meta name="twitter:image" content="https://476537381.xyz/assets/aistudio/a3afa24fcf5bcde2a9d8437ee976526e_db58066f.webp" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#FAF7F0" />
+
+    <!-- High-priority Preload for Instant First-screen Visual Paint -->
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/aistudio/a3afa24fcf5bcde2a9d8437ee976526e_db58066f.webp"
+      fetchpriority="high"
+      type="image/webp"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/aistudio/2180acf6d535c82ad8f3c805385a9c17_0e53c795.webp"
+      fetchpriority="high"
+      type="image/webp"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -76,5 +94,16 @@
   <body class="bg-[#EAE6DF] text-[#1C1B19] antialiased selection:bg-[#8B3A2B]/20 selection:text-[#8B3A2B]">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- PWA Offline Engine Auto-Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js').catch(function (err) {
+            console.warn('SW registration skipped:', err);
+          });
+        });
+      }
+    </script>
   </body>
 </html>
